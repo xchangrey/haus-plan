@@ -24,8 +24,6 @@ export default function StepsComponentView(props: CreateStepsProps) {
   const handleReset = () => {
     setActiveStep(0);
   };
-
-  console.log(steps)
          
   return (
     <Box sx={{ maxWidth: 400 }}>

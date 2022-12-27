@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Steps } from '../../types/Step';
 import { getSteps } from '../../services/steps';
 import StepsComponentView from "./StepsComponent.view";
-import { CreateStepsPrivateProps } from './StepsComponent.props';
+import { CreateStepsProps } from './StepsComponent.props';
 
 export default function StepsComponent() {
   const [steps, setSteps] = useState([]);
@@ -17,7 +17,7 @@ export default function StepsComponent() {
     fetchData();
   }, []);
 
-  const stepsProps: CreateStepsPrivateProps = {
+  const stepsProps: CreateStepsProps = {
     steps,
   };
 
