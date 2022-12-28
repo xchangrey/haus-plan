@@ -4,3 +4,5 @@ export type Step = {
 };
 
 export type Steps = Step[];
+
+export type Selections = string[];
