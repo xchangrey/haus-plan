@@ -7,20 +7,20 @@ import { Selections } from "../../../types/Step";
 type SelectProps = {
   name: string;
   label: string;
-  selections: Selections | undefined;
+  value: string;
+  selections: Selections;
   onSelect: (value: SelectChangeEvent) => void;
 };
 
 const SelectComponent = (props: SelectProps) => {
-  const { label, name, selections, onSelect } = props;
+  const { label, name, value, selections, onSelect } = props;
 
   return (
     <>
       <InputLabel>{label}</InputLabel>
       <Select
         name={name}
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
+        value={value}
         label={label}
         onChange={onSelect}
       >

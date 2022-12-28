@@ -19,7 +19,7 @@ import { SelectChangeEvent } from "@mui/material";
 type Values = {
   foundation : string;
   size : string;
-  floors : number | undefined;
+  floors : number;
   roof: string;
   garden: string;
   isChanged?: boolean;
@@ -59,7 +59,7 @@ const StepsComponentView = (props: CreateStepsProps) => {
     });
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: any) => {
     event.preventDefault();
     console.log(values)
   }
@@ -77,17 +77,17 @@ const StepsComponentView = (props: CreateStepsProps) => {
   const getStepContent = (stepIndex: number) => {
     switch (stepIndex) {
       case 0:
-        return <Foundation name="foundation" onSelect={handleSelect} />;
+        return <Foundation value={values.foundation} name="foundation" onSelect={handleSelect} />;
       case 1:
-        return <Size name="size" onInput={handleSelect} />;
+        return <Size value={values.size} name="size" onInput={handleSelect} />;
       case 2:
-        return <Floors name="floors" onSlide={handleSelect} />;
+        return <Floors value={values.floors} name="floors" onSlide={handleSelect} />;
       case 3:
         return <RoomSpecifications />
       case 4:
-        return <Roof name="roof" onSelect={handleSelect} />
+        return <Roof value={values.roof} name="roof" onSelect={handleSelect} />
       case 5:
-        return <Garden name="garden" onSelect={handleSelect} />
+        return <Garden value={values.garden} name="garden" onSelect={handleSelect} />
       default:
         throw new Error('Step is not found.');
     }

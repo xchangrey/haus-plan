@@ -3,9 +3,7 @@ import { Steps } from "../types/Step";
 const steps = [
   {
     label: 'Select foundation',
-    description: `For each ad campaign that you create, you can control how much
-              you're willing to spend on clicks and conversions, which networks
-              and geographical locations you want your ads to show on, and more.`,
+    description: `Select foundation for the house`,
   },
   {
     label: 'Select size',
