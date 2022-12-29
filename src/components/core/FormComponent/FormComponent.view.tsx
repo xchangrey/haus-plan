@@ -2,12 +2,13 @@ import React from "react";
 import Box from '@mui/material/Box';
 
 type FormProps = {
+  submitForm: (event: any) => void;
   children: JSX.Element;
 }
 
-const FormComponent = ({ children }: FormProps ) => {
+const FormComponent = ({ submitForm, children }: FormProps ) => {
   return (
-    <Box component="form">
+    <Box onSubmit={submitForm} component="form">
       {children}
     </Box>
   )

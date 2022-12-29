@@ -15,14 +15,26 @@ import RoomSpecifications from "../../components/RoomSpecifications";
 import Roof from "../../components/Roof";
 import Garden from "../../components/Garden";
 import { SelectChangeEvent } from "@mui/material";
+import { FormFields } from "../../types/Step";
 
-type Values = {
+interface Values {
   foundation : string;
   size : string;
   floors : number;
   roof: string;
   garden: string;
   isChanged?: boolean;
+  roomSpecs: {
+    roomSize: string;
+    type: string;
+    roomProperties: string[];
+    floorType: string;
+    windows: {
+      windowId: string;
+      style: string;
+      glassType: string;
+    }
+  }
 }
 
 const StepsComponentView = (props: CreateStepsProps) => {
@@ -34,6 +46,17 @@ const StepsComponentView = (props: CreateStepsProps) => {
     floors: 0,
     roof: "",
     garden: "",
+    roomSpecs: {
+      roomSize: "",
+      type: "",
+      roomProperties: [],
+      floorType: "",
+      windows: {
+        windowId: "",
+        style: "",
+        glassType: "",
+      },
+    },
     isChanged: false,
   });
 
@@ -71,33 +94,78 @@ const StepsComponentView = (props: CreateStepsProps) => {
   );
 
   const handleSelect = (event: SelectChangeEvent) => {
-    setValues({...values, isChanged: true, [event.target.name as string]: [event.target.value as string]})
+    setValues({...values, isChanged: true, [event.target.name as string]: event.target.value as string})
   };
 
-  const getStepContent = (stepIndex: number) => {
+  const handleMultipleSelect = (event: SelectChangeEvent<string[]>) => {
+    const {
+      target: { value, name },
+    } = event;
+
+    console.log(value)
+
+    setValues({
+      ...values,
+      [name]: [value]
+    });
+
+    // setValues({
+    //   // On autofill we get a stringified value.
+    //   ...values,
+    //   [event.target.name as string]: typeof value === 'string' ? value.split(',') : value});
+  };
+
+  const getStepContent = (stepIndex: number, formFields: FormFields) => {
+    const { roomSpecs } = formFields;
     switch (stepIndex) {
       case 0:
-        return <Foundation value={values.foundation} name="foundation" onSelect={handleSelect} />;
+        return <Foundation 
+          value={values.foundation} 
+          onSelect={handleSelect} 
+          submitForm={handleSubmit}
+          {...formFields}
+        />;
       case 1:
-        return <Size value={values.size} name="size" onInput={handleSelect} />;
+        return <Size 
+          value={values.size} 
+          onInput={handleSelect} 
+          {...formFields}
+        />;
       case 2:
-        return <Floors value={values.floors} name="floors" onSlide={handleSelect} />;
+        return <Floors 
+          value={values.floors} 
+          onSlide={handleSelect} 
+          {...formFields}
+        />;
       case 3:
-        return <RoomSpecifications />
+        return <RoomSpecifications
+          values={values.roomSpecs.roomProperties}
+          roomSpecs={roomSpecs}
+          onSelect={handleMultipleSelect}
+          submitForm={handleSubmit}
+        />
       case 4:
-        return <Roof value={values.roof} name="roof" onSelect={handleSelect} />
+        return <Roof 
+          value={values.roof} 
+          onSelect={handleSelect} 
+          {...formFields} 
+        />
       case 5:
-        return <Garden value={values.garden} name="garden" onSelect={handleSelect} />
+        return <Garden 
+          value={values.garden} 
+          onSelect={handleSelect} 
+          {...formFields}
+        />
       default:
         throw new Error('Step is not found.');
     }
   }
 
   return (
-    <Box component='form' onSubmit={(e) => handleSubmit(e)}>
+    <Box>
       <Stepper activeStep={activeStep} orientation="vertical">
-        {steps.map((step, index) => (
-          <Step key={step.label}>
+        {steps.map(({label, description, formFields}, index) => (
+          <Step key={label}>
             <StepLabel
               optional={
                 index === 5 ? (
@@ -105,12 +173,12 @@ const StepsComponentView = (props: CreateStepsProps) => {
                 ) : null
               }
             >
-              {step.label}
+              {label}
             </StepLabel>
             <StepContent>
-              <Typography>{step.description}</Typography>
+              <Typography>{description}</Typography>
               <Box sx={{ mb: 2 }}>
-                {getStepContent(index)}
+                {getStepContent(index, formFields)}
                 <div>
                   <Button
                     variant="contained"

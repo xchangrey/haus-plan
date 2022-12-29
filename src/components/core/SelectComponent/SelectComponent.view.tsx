@@ -1,5 +1,5 @@
 import React from "react";
-import { InputLabel } from "@mui/material";
+import { FormControl, InputLabel } from "@mui/material";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from "@mui/material/MenuItem";
 import { Selections } from "../../../types/Step";
@@ -9,14 +9,15 @@ type SelectProps = {
   label: string;
   value: string;
   selections: Selections;
+  isRequired: boolean;
   onSelect: (value: SelectChangeEvent) => void;
 };
 
 const SelectComponent = (props: SelectProps) => {
-  const { label, name, value, selections, onSelect } = props;
+  const { label, name, value, selections, onSelect, isRequired } = props;
 
   return (
-    <>
+    <FormControl required={isRequired} fullWidth>
       <InputLabel>{label}</InputLabel>
       <Select
         name={name}
@@ -30,7 +31,7 @@ const SelectComponent = (props: SelectProps) => {
           )
         })}
       </Select>
-    </>
+    </FormControl>
     
   )
 }
