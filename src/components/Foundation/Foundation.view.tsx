@@ -1,32 +1,33 @@
 import React from "react";
-import { FormControl, SelectChangeEvent } from "@mui/material";
+import { SelectChangeEvent } from "@mui/material";
 import SelectComponent from "../core/SelectComponent";
 import FormComponent from "../core/FormComponent";
 
 const selections: string[] | undefined = ['Brick', 'Slab', 'Reinforced concrete'];
+
 type FoundationProps = {
   name: string;
   value: string;
+  label: string;
   isRequired: boolean;
   errorMsg: string;
-  submitForm: (event: any) => void;
   onSelect: (event: SelectChangeEvent) => void;
 }
 
 const Foundation = ({ 
   name, 
   onSelect, 
-  submitForm, 
   value, 
+  label,
   isRequired 
 }: FoundationProps ) => {
   return (
-    <FormComponent submitForm={submitForm}>
+    <FormComponent>
       <SelectComponent
         isRequired={isRequired}
         value={value}
         name={name}
-        label={"Foundation"}
+        label={label}
         selections={selections}
         onSelect={onSelect}
       />

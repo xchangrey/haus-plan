@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -24,39 +24,37 @@ interface Values {
   roof: string;
   garden: string;
   isChanged?: boolean;
-  roomSpecs: {
-    roomSize: string;
-    type: string;
-    roomProperties: string[];
-    floorType: string;
-    windows: {
-      windowId: string;
-      style: string;
-      glassType: string;
-    }
+  roomSize: string| unknown;
+  type: string | unknown;
+  roomProperties: string[];
+  floorType: string;
+  windows: {
+    windowId: string;
+    style: string;
+    glassType: string;
   }
 }
 
 const StepsComponentView = (props: CreateStepsProps) => {
   const { steps } = props;
   const [activeStep, setActiveStep] = useState(0);
+  const [roomProps, setRoomProps] = useState<string[]>([]);
   const [values, setValues] = useState<Values>({
     foundation: "",
     size: "",
     floors: 0,
     roof: "",
     garden: "",
-    roomSpecs: {
-      roomSize: "",
-      type: "",
-      roomProperties: [],
-      floorType: "",
-      windows: {
-        windowId: "",
-        style: "",
-        glassType: "",
-      },
+    roomSize: "",
+    type: "",
+    roomProperties: [],
+    floorType: "",
+    windows: {
+      windowId: "",
+      style: "",
+      glassType: "",
     },
+
     isChanged: false,
   });
 
@@ -82,38 +80,23 @@ const StepsComponentView = (props: CreateStepsProps) => {
     });
   };
 
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    console.log(values)
-  }
+  const handleSelect = (event: SelectChangeEvent) => {
+    console.log(event.target.name)
+    setValues({...values, isChanged: true, [event.target.name as string]: event.target.value as string})
+  };
+
+  const handleMultipleSelect = (event: SelectChangeEvent<typeof roomProps>) => {
+    const {
+      target: { value },
+    } = event;
+    setRoomProps(typeof value === "string" ? value.split(",") : value);
+  };
 
   if (!steps.length) return(
     <Box>
       Loading...
     </Box>
   );
-
-  const handleSelect = (event: SelectChangeEvent) => {
-    setValues({...values, isChanged: true, [event.target.name as string]: event.target.value as string})
-  };
-
-  const handleMultipleSelect = (event: SelectChangeEvent<string[]>) => {
-    const {
-      target: { value, name },
-    } = event;
-
-    console.log(value)
-
-    setValues({
-      ...values,
-      [name]: [value]
-    });
-
-    // setValues({
-    //   // On autofill we get a stringified value.
-    //   ...values,
-    //   [event.target.name as string]: typeof value === 'string' ? value.split(',') : value});
-  };
 
   const getStepContent = (stepIndex: number, formFields: FormFields) => {
     const { roomSpecs } = formFields;
@@ -122,7 +105,6 @@ const StepsComponentView = (props: CreateStepsProps) => {
         return <Foundation 
           value={values.foundation} 
           onSelect={handleSelect} 
-          submitForm={handleSubmit}
           {...formFields}
         />;
       case 1:
@@ -139,10 +121,14 @@ const StepsComponentView = (props: CreateStepsProps) => {
         />;
       case 3:
         return <RoomSpecifications
-          values={values.roomSpecs.roomProperties}
+          roomProperties={roomProps}
+          roomSizeValue={values.roomSize}
+          floorTypeValue={values.floorType}
+          roomTypeValue={values.type}
           roomSpecs={roomSpecs}
-          onSelect={handleMultipleSelect}
-          submitForm={handleSubmit}
+          onInput={handleSelect}
+          onSelect={handleSelect}
+          onMultipleSelect={handleMultipleSelect}
         />
       case 4:
         return <Roof 

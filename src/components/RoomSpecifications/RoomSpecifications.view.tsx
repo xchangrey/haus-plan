@@ -5,14 +5,18 @@ import { RoomSpecs, Selections } from "../../types/Step";
 
 type RoomSpecsProps = {
   roomSpecs?: RoomSpecs;
-  values: string[];
-  submitForm: (event: any) => void;
-  onSelect: (event: SelectChangeEvent<string[]>) => void;
+  roomProperties: string[];
+  roomSizeValue: string | unknown;
+  floorTypeValue: string | unknown;
+  roomTypeValue: string | unknown;
+  onInput: (event: any) => void;
+  onSelect: (event: any) => void;
+  onMultipleSelect: (event: SelectChangeEvent<string[]>) => void;
 }
 
-const floorTypes: Selections = ['None', 'Wood', 'Carpet'];
-const roomTypes: Selections = ['None','Bedroom', 'Lounge', 'Diner', 'Kitchen', 'Bathroom', 'Office'];
-const roomProperties: Selections = ['None','Office desk', 'Bed', 'Desk plant', 'Airconditioner', 'Closet', 'Side table', 'Sofa'];
+const floorTypes: Selections = ['Wood', 'Carpet'];
+const roomTypes: Selections = ['Bedroom', 'Lounge', 'Diner', 'Kitchen', 'Bathroom', 'Office'];
+const properties: Selections = ['Office desk', 'Bed', 'Desk plant', 'Airconditioner', 'Closet', 'Side table', 'Sofa'];
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -26,15 +30,26 @@ const MenuProps = {
 };
 
 const RoomSpecifications = ({ 
-  submitForm, onSelect, roomSpecs, values} : RoomSpecsProps) => {
+    roomSpecs, 
+    roomProperties, 
+    floorTypeValue, 
+    roomTypeValue,
+    roomSizeValue,
+    onSelect, 
+    onInput,
+    onMultipleSelect
+  } : RoomSpecsProps) => {
   return (
-    <FormComponent submitForm={submitForm}>
+    <FormComponent>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <TextField
+            required
+            value={roomSizeValue}
             name={roomSpecs?.roomSize.name}
             label={roomSpecs?.roomSize.label}
             fullWidth
+            onChange={onInput}
             helperText="(size is in square meters)"
           />
         </Grid>
@@ -44,7 +59,9 @@ const RoomSpecifications = ({
             <Select
               name={roomSpecs?.type.name}
               label={roomSpecs?.type.label}
+              value={roomTypeValue}
               fullWidth
+              onChange={onSelect}
             >
               {roomTypes?.map((selection, index) => {
                 return (
@@ -56,11 +73,13 @@ const RoomSpecifications = ({
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl required fullWidth>
-          <InputLabel>{roomSpecs?.floorType.label}</InputLabel>
+            <InputLabel>{roomSpecs?.floorType.label}</InputLabel>
             <Select
               name={roomSpecs?.floorType.name}
               label={roomSpecs?.floorType.label}
+              value={floorTypeValue}
               fullWidth
+              onChange={onSelect}
             >
               {floorTypes?.map((selection, index) => {
                 return (
@@ -75,7 +94,7 @@ const RoomSpecifications = ({
             <InputLabel>{roomSpecs?.roomProperties.label}</InputLabel>
             <Select
               label={roomSpecs?.roomProperties.label}
-              value={values}
+              value={roomProperties}
               multiple
               input={<OutlinedInput label={roomSpecs?.roomProperties.name} />}
               renderValue={(selected: string[]) => (
@@ -85,10 +104,10 @@ const RoomSpecifications = ({
                   ))}
                 </Box>
               )}
-              onChange={onSelect}
+              onChange={onMultipleSelect}
               MenuProps={MenuProps}
             >
-              {roomProperties?.map((selection, index) => {
+              {properties?.map((selection, index) => {
                 return (
                   <MenuItem key={index} value={selection.toLowerCase()}>{selection}</MenuItem>
                 )

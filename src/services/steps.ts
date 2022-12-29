@@ -46,7 +46,7 @@ const steps: Steps = [
           label: 'Room size',
         },
         type: {
-          name: 'roomType',
+          name: 'type',
           label: 'Room type',
         },
         roomProperties: {
