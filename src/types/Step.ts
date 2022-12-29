@@ -1,4 +1,5 @@
 type Window = {
+  window: NameLabel;
   style: NameLabel;
   glassType: NameLabel;
 }

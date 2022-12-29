@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Chip, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, Select, SelectChangeEvent, TextField } from "@mui/material";
 import FormComponent from "../core/FormComponent";
 import { RoomSpecs, Selections } from "../../types/Step";
+import Windows from "../Windows";
 
 type RoomSpecsProps = {
   roomSpecs?: RoomSpecs;
@@ -9,6 +10,7 @@ type RoomSpecsProps = {
   roomSizeValue: string | unknown;
   floorTypeValue: string | unknown;
   roomTypeValue: string | unknown;
+  windowValue: string | unknown;
   onInput: (event: any) => void;
   onSelect: (event: any) => void;
   onMultipleSelect: (event: SelectChangeEvent<string[]>) => void;
@@ -35,10 +37,19 @@ const RoomSpecifications = ({
     floorTypeValue, 
     roomTypeValue,
     roomSizeValue,
+    windowValue,
     onSelect, 
     onInput,
     onMultipleSelect
   } : RoomSpecsProps) => {
+  const hasWindows: boolean = Number(windowValue) > 0;
+  const windowsCount = new Array(windowValue).fill("").map((_, i) => i + 1);
+  const windows: JSX.Element[] = [];
+
+  for (let i = 1; i<= Number(window); i++){
+    windows.push(<Windows windowId={`window${i}`} key={i} />)
+  }
+
   return (
     <FormComponent>
       <Grid container spacing={3}>
@@ -115,6 +126,17 @@ const RoomSpecifications = ({
             </Select>
           </FormControl>
         </Grid>
+        <Grid item xs={12} md={12}>
+          <TextField
+            required
+            value={windowValue}
+            name={roomSpecs?.windows.window.name}
+            label={roomSpecs?.windows.window.label}
+            fullWidth
+            onChange={onInput}
+          />
+        </Grid>
+        { hasWindows && windows}
       </Grid>
     </FormComponent>
   );

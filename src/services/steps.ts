@@ -58,6 +58,10 @@ const steps: Steps = [
           label: 'Floor type',
         },
         windows: {
+          window: {
+            name: 'numberOfWindow',
+            label: 'Number of windows',
+          },
           style: {
             name: 'windowStyle',
             label: 'Window style',

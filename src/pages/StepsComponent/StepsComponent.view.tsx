@@ -28,17 +28,22 @@ interface Values {
   type: string | unknown;
   roomProperties: string[];
   floorType: string;
-  windows: {
-    windowId: string;
-    style: string;
-    glassType: string;
-  }
+  numberOfWindow: string | unknown;
+}
+
+interface Windows {
+  windowId: string;
+  style: string;
+  glassType: string;
 }
 
 const StepsComponentView = (props: CreateStepsProps) => {
   const { steps } = props;
   const [activeStep, setActiveStep] = useState(0);
   const [roomProps, setRoomProps] = useState<string[]>([]);
+  const [windows, setWindows] = useState<Windows[]>([
+
+  ]);
   const [values, setValues] = useState<Values>({
     foundation: "",
     size: "",
@@ -49,12 +54,7 @@ const StepsComponentView = (props: CreateStepsProps) => {
     type: "",
     roomProperties: [],
     floorType: "",
-    windows: {
-      windowId: "",
-      style: "",
-      glassType: "",
-    },
-
+    numberOfWindow: "",
     isChanged: false,
   });
 
@@ -80,9 +80,18 @@ const StepsComponentView = (props: CreateStepsProps) => {
     });
   };
 
+  const handleReview = () => {
+    setValues({
+      ...values,
+      roomProperties: [...roomProps]
+    });
+
+    console.log(values)
+  }
+
   const handleSelect = (event: SelectChangeEvent) => {
-    console.log(event.target.name)
-    setValues({...values, isChanged: true, [event.target.name as string]: event.target.value as string})
+    const { target: { value, name }} = event;
+    setValues({...values, isChanged: true, [name as string]: value as string})
   };
 
   const handleMultipleSelect = (event: SelectChangeEvent<typeof roomProps>) => {
@@ -125,6 +134,7 @@ const StepsComponentView = (props: CreateStepsProps) => {
           roomSizeValue={values.roomSize}
           floorTypeValue={values.floorType}
           roomTypeValue={values.type}
+          windowValue={values.numberOfWindow}
           roomSpecs={roomSpecs}
           onInput={handleSelect}
           onSelect={handleSelect}
@@ -192,8 +202,8 @@ const StepsComponentView = (props: CreateStepsProps) => {
           <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
             Reset
           </Button>
-          <Button type='submit' sx={{ mt: 1, mr: 1 }}>
-            Submit
+          <Button onClick={handleReview} sx={{ mt: 1, mr: 1 }}>
+            Review
           </Button>
         </Paper>
       )}
