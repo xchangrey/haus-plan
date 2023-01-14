@@ -27,17 +27,18 @@ const marks = [
 const valueText = (num: number) => num.toString();
 type FloorsProps = {
   name: string;
+  value: number;
   onSlide: (event: any) => void;
 }
  
 const Floors = (props: FloorsProps) => {
-  const { onSlide, name } = props;
+  const { onSlide, name, value } = props;
 
   return (
     <FormControl fullWidth>
       <Slider 
         name={name}
-        aria-label="Floors"
+        value={value}
         getAriaValueText={valueText}
         valueLabelDisplay="auto"
         step={1}

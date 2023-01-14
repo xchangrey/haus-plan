@@ -1,25 +1,28 @@
 import React from "react";
-import { FormControl, SelectChangeEvent } from "@mui/material";
+import { SelectChangeEvent } from "@mui/material";
 import SelectComponent from "../core/SelectComponent";
 
 const selections: string[] = ['Straw', 'Thatched', 'Tiled', 'Flat'];
 
 type RoofProps = {
   name: string;
+  value: string;
+  label: string;
+  isRequired: boolean;
   onSelect: (event: SelectChangeEvent) => void;
 }
 
 const Roof = (props: RoofProps) => {
-  const { name, onSelect } = props;
+  const { name, value, onSelect, isRequired, label } = props;
   return (
-    <FormControl fullWidth>
-      <SelectComponent
-        name={name}
-        label={"Roof type"}
-        selections={selections}
-        onSelect={onSelect}
-      />
-    </FormControl>
+    <SelectComponent
+      isRequired={isRequired}
+      value={value}
+      name={name}
+      label={label}
+      selections={selections}
+      onSelect={onSelect}
+    />
   );
 }
 

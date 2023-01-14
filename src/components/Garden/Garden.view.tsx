@@ -5,23 +5,25 @@ import SelectComponent from "../core/SelectComponent";
 
 type GardenProps = {
   name: string;
+  value: string;
+  isRequired: boolean;
   onSelect: (event: SelectChangeEvent) => void;
 }
 
 const selections: Selections = ['Rose','Gumamela', 'Sunflower'];
 
 const Garden = (props: GardenProps) => {
-  const { name, onSelect } = props;
+  const { name, onSelect, value, isRequired } = props;
 
   return (
-    <FormControl fullWidth>
-      <SelectComponent
-        name={name}
-        label={"Garden"}
-        selections={selections}
-        onSelect={onSelect}
-      />
-    </FormControl>
+    <SelectComponent
+      isRequired={isRequired}
+      value={value}
+      name={name}
+      label={"Garden"}
+      selections={selections}
+      onSelect={onSelect}
+    />
   );
 }
 

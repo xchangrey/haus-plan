@@ -3,23 +3,25 @@ import { FormControl, TextField } from "@mui/material";
 
 type SizeProps = {
   name: string;
+  value: string;
+  label: string;
+  isRequired: boolean;
   onInput: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Size = (props: SizeProps) => {
-  const { name, onInput } = props;
+  const { name, onInput, value, isRequired, label } = props;
 
   return (
-    <FormControl fullWidth>
       <TextField
+        required={isRequired}
         name={name}
-        id="Size" 
-        label="House size" 
-        variant="outlined" 
+        value={value}
+        label={label}
         helperText="(size is in square meters)"
         onChange={onInput}
+        fullWidth
       />
-    </FormControl>
   );
 }
 

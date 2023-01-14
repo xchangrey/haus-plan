@@ -5,7 +5,7 @@ type FormProps = {
   children: JSX.Element;
 }
 
-const FormComponent = ( { children }: FormProps ) => {
+const FormComponent = ({ children }: FormProps ) => {
   return (
     <Box component="form">
       {children}
